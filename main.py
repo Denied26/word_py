@@ -1,8 +1,8 @@
 from Note import Note
 
 dict = {
-    'to_position': 'Начальник отдела',
-    'to_fio': 'Некрасов В.И',
+    'to_position': 'Начальнику отдела',
+    'to_fio': 'Некрасову В.И',
     'date': '26.10.2000',
     'number': '123456',
     'link': 'wii',
@@ -15,7 +15,7 @@ dict = {
     't_number': '1-234-5'
 }
 arr =[ {
-    'to_position': 'Начальник отдела',
+    'to_position': 'Начальнику отдела',
     'text': 'Требуется замена принтера в 123 кабинете',
     'from_fio': 'Кучерев И.А',
     'from_position': 'Бухгалтер',
@@ -35,4 +35,4 @@ arr2 = [[1, 2, 3], [3, 4, 5], [6, 7, 8]]
 its = Note(note_arr=dict, table_arr=arr)
 its.makeWordFile()
 its.addTableEasy(arr2)
-its.addText('Проверка функционала добавления текста')
+its.addText('Проверка функционала добавления текста отдельной функцией.')
