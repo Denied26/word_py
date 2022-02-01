@@ -43,12 +43,55 @@ class Note(object):
         doc.render(self.note_arr)
         doc.save(self.save_place + self.name_file)
         if do_table and self.table_arr is not None:
-            self.addTable(self.table_arr)
-
+            self.addTableHard(self.table_arr)
     # рендер таблицы
-    def addTable(self, arr):
+    def formingTableArray(self, arr):
+        #максимум столбцов с троке
+        max_col = 0
+        #строка где этот максимум
+        row_max_col = 0
+        #список столбцов
+        col = {}
+        # массив заполненый пустыми строками для заполнения в количестве столюцов
+        empty_arr = []
+        for i in range(len(arr)):
+            if max_col < len(arr[i]):
+                max_col = len(arr[i])
+                row_max_col = i
+        #готовый отсортированнный масссив с проставленными пустыми строками
+        r_arr = []
+        # формируем словарь ключ-индекс столбца
+        for i, key in enumerate(arr[row_max_col]):
+            col[key] = i
+            empty_arr.append('')
+
+        for row in range(len(arr)):
+            r_arr.append([])
+            r_arr[row] = empty_arr.copy()
+            for key,value in arr[row].items():
+                try :
+                    r_arr[row][col[key]] = value
+                except:
+                    col[key] = len(col)
+                    empty_arr.append('')
+                    r_arr[row].append(value)
+        return r_arr
+    def addTableEasy(self,arr):
         doc = Document(self.name_file)
         text = doc.tables[0].rows[7].cells[1]
+        table = text.add_table(rows=len(arr), cols=len(arr[0]))
+        # границы таблицы
+        table.style = 'Table Grid'
+        for i in range(len(arr)):
+            row = table.rows[i].cells
+            for j in range(len(arr[0])):
+                row[j].text = str(arr[i][j])
+        doc.save(self.save_place + self.name_file)
+
+    def addTableHard(self,t_arr):
+        doc = Document(self.name_file)
+        text = doc.tables[0].rows[7].cells[1]
+        arr = self.formingTableArray(t_arr)
         max_col = 0
         # ищем строку с максимальным количеством столюцов
         for i in range(len(arr)):
@@ -68,3 +111,8 @@ class Note(object):
                     row[j].text = ''
         doc.save(self.save_place + self.name_file)
 
+    def addText(self,string):
+        doc = Document(self.name_file)
+        text = doc.tables[0].rows[7].cells[1]
+        table = text.add_paragraph(string)
+        doc.save(self.save_place + self.name_file)
